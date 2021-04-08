@@ -4,3 +4,6 @@ class FoodItem:
 		self.name = name
 		self.quantity = buyQuantity
 		self.price = price
+
+	def __str__(self):
+		return "[" + self.name + "," + str(self.quantity) + "," + str(self.price) + "]"
