@@ -10,70 +10,72 @@ PRICE_LOC = os.path.join("data", "prices.csv")
 DATA_LOC = os.path.join("data", "data.txt")
 
 
+# Load meal data from meals.csv
 def getMeals():
-	meals = []
+	meals = {}
 	with open(os.path.join(BASE_DIR, MEAL_LOC), "r") as file:
 		csv_reader = csv.reader(file, delimiter=',')
 		for row in csv_reader:
-			meals.append(Meal(row[0], row[1:]))
+			meals[row[0]] = Meal(row[0], row[1:])
 	return meals
 
 
+# Load the cupboard items
 def getItems(loc):
-	items = []
+	items = {}
 	with open(os.path.join(BASE_DIR, loc), "r") as file:
 		csv_reader = csv.reader(file, delimiter=',')
 		for row in csv_reader:
-			items.append(FoodItem(row[0], row[1], row[2]))
+			items[row[0]] = FoodItem(row[0], row[1], row[2])
 	return items
 
 
+# Load all user data
 def loadData():
 	with open(os.path.join(BASE_DIR, DATA_LOC), "r") as f:
 		return f.readlines()
 
 
-def addMeal(name, ingredients):
-	with open(os.path.join(BASE_DIR, MEAL_LOC), "r+") as file:
-		csv_reader = csv.reader(file, delimiter=",")
-		for row in csv_reader:
-			if row[0] == name:
-				print("[ FAIL ] Meal already exists")
-				return
-		items = ""
-		for i in ingredients:
-			items += f"{i.name}:{i.quantity}" + ","
-		file.write(f"{name},{items[:-1]}\n")
-	
+# Add a meal to all the meals
+def updateMeal(meals):
+	with open(os.path.join(BASE_DIR, MEAL_LOC), "w") as file:
+		for meal in meals:
+			items = ""
+			for i in meal.ingredients:
+				items += f"{i.name}:{i.quantity}" + ","
+			file.write(f"{meal.name},{items[:-1]}\n")
+		
 
-def addFoodItem(name, quantity):
-	with open(os.path.join(BASE_DIR, ITEM_LOC), "a") as file:
-		file.write(f"{name},{str(quantity)},{str(price)}\n")
-
-def editFoodItem(name, quantity)
+# Add an item that you can shop
+def updateCupboard(items):
+	with open(os.path.join(BASE_DIR, ITEM_LOC), "w") as f:
+		for item in items:
+			print(f"Adding {item.name}")
+			f.write(f"{item.name},{str(item.quantity)},{str(item.price)}\n")
 
 
-def addPriceItem(name, quantity, price):
-	with open(os.path.join(BASE_DIR,PRICE_LOC),"r+") as file:
-		for row in csv.reader(file, delimiter=","):
-			if row[0] == name:
-				print("[ FAIL ] Price is already added")
-				return
-		file.write(f"{name},{str(quantity)},{str(price)}\n")
+# Write item prices to the files
+def updatePriceItem(prices):
+	with open(os.path.join(BASE_DIR, PRICE_LOC),"w") as file:
+		for price in prices:
+			file.write(f"{price.name},{str(price.quantity)},{str(price.price)}\n")
+
+
+def calculateMealPlan(budget, time):
+	time *= 2
 
 
 def main():
 
-	balance = getData()
+	# balance = getData()
 
 	items = getItems(ITEM_LOC)
 	prices = getItems(PRICE_LOC)
 	meals = getMeals()
 
-	print("ITEMS:")
+	budget = float(input("Enter amount of money: "))
+	time = int(input("Enter number of days: "))
 
-	print(meals[0].ingredients)
-	print(str(items[0]))
 
 if __name__ == "__main__":
 	main()
