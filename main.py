@@ -6,24 +6,28 @@ from food_planner.foodItem import FoodItem
 BASE_DIR = os.getcwd()
 MEAL_LOC = os.path.join("data", "meals.csv")
 ITEM_LOC = os.path.join("data", "cupboard.csv")
-PRICE_LOC = os.path.join("data", "prices.csv")
 DATA_LOC = os.path.join("data", "data.txt")
 
 
 # Load meal data from meals.csv
 def getMeals():
-	meals = {}
+	meals = []
 	with open(os.path.join(BASE_DIR, MEAL_LOC), "r") as file:
 		csv_reader = csv.reader(file, delimiter=',')
 		for row in csv_reader:
-			meals[row[0]] = Meal(row[0], row[1:])
+			items = []
+			for ingredient in row[1:]:
+				items.append(ingredient.split(":"))
+			ingredients = [FoodItem(item[0], item[1], item[2]) for item in items]
+			# TODO: fix bug where not all ingredients are loaded
+			meals.append(Meal(row[0], ingredients))
 	return meals
 
 
 # Load the cupboard items
-def getItems(loc):
+def getItems():
 	items = {}
-	with open(os.path.join(BASE_DIR, loc), "r") as file:
+	with open(os.path.join(BASE_DIR, ITEM_LOC), "r") as file:
 		csv_reader = csv.reader(file, delimiter=',')
 		for row in csv_reader:
 			items[row[0]] = FoodItem(row[0], row[1], row[2])
@@ -42,7 +46,7 @@ def updateMeal(meals):
 		for meal in meals:
 			items = ""
 			for i in meal.ingredients:
-				items += f"{i.name}:{i.quantity}" + ","
+				items += f"{i.name}:{i.quantity}:{i.price}" + ","
 			file.write(f"{meal.name},{items[:-1]}\n")
 		
 
@@ -54,27 +58,45 @@ def updateCupboard(items):
 			f.write(f"{item.name},{str(item.quantity)},{str(item.price)}\n")
 
 
-# Write item prices to the files
-def updatePriceItem(prices):
-	with open(os.path.join(BASE_DIR, PRICE_LOC),"w") as file:
-		for price in prices:
-			file.write(f"{price.name},{str(price.quantity)},{str(price.price)}\n")
+def calculateMealPlan(budget, time, meals):
+	mealAmount = time*2
 
+	meal_plan = []
 
-def calculateMealPlan(budget, time):
-	time *= 2
+	
+	poorAttraction, mediumAttraction, richAttraction = 0,0,0
 
+	rich_meals = []
+	medium_meals = []
+	poor_meals = []
+
+	for meal in meals:
+		if meal.calcPrice() > 5:
+			rich_meals.append(meal)
+		elif meal.calcPrice()() >= 3:
+			medium_meals.append(meal)
+		else:
+			poor_meals.append(meal)
+
+	# For every block of days select some random meals and appends
+
+	for i in range(time):
+		pass
+		
+
+	return meal_plan
 
 def main():
 
 	# balance = getData()
 
-	items = getItems(ITEM_LOC)
-	prices = getItems(PRICE_LOC)
+	items = getItems()
 	meals = getMeals()
 
 	budget = float(input("Enter amount of money: "))
 	time = int(input("Enter number of days: "))
+
+	print(calculateMealPlan(budget, time, meals))
 
 
 if __name__ == "__main__":

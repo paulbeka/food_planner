@@ -11,7 +11,3 @@ if not os.path.exists(meals):
 if not os.path.exists(items):
 	with open(items, "w") as f:
 		pass
-
-if not os.path.exists(prices):
-	with open(prices, "w") as f:
-		pass
