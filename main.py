@@ -1,7 +1,7 @@
 import random, csv, os
 from food_planner.meal import Meal
 from food_planner.foodItem import FoodItem
-from food_planner.tools import getItems, getMeals
+from food_planner.tools import getItems, getMeals, updateCupboard
 
 
 POOR, MEDIUM, RICH = 2, 3, 5
@@ -26,17 +26,12 @@ def calculateMealPlan(budget, time, meals):
 
 	# classify meal prices
 	for meal in meals:
-		print(meal.price)
 		if meal.price > 5:
 			rich_meals.append(meal)
 		elif meal.price >= 3:
 			medium_meals.append(meal)
 		else:
 			poor_meals.append(meal)
-
-	print(rich_meals)
-	print(medium_meals)
-	print(poor_meals)
 
 	# For every block of days select some random meals and appends
 
@@ -67,19 +62,34 @@ def calculateMealPlan(budget, time, meals):
 
 	return meal_plan
 
+def getPossibleMeals(meals, cupboard):
+	final = []
+	for meal in meals:
+		for ingredient in meal.ingredients:
+			if ingredient in cupboard:
+				final.append(meal)
+
 def main():
 
 	# balance = getData()
 
 	items = getItems()
-	meals = getMeals()
+	meals = getPossibleMeals(getMeals(), items)
+
+	if meals == None:
+		print("No possible meals.")
+		return
 
 	budget = 100
 	time = 10
+	print(items)
 
 	for item in calculateMealPlan(budget, time, meals):
-		items[item.name] = 0
+		print(item)
+		for ingredient in item.ingredients:
+			items[ingredient.name].quantity -= ingredient.quantity
 
+	updateCupboard(items)
 
 if __name__ == "__main__":
 	main()
