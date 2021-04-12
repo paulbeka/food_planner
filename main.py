@@ -66,8 +66,9 @@ def getPossibleMeals(meals, cupboard):
 	final = []
 	for meal in meals:
 		for ingredient in meal.ingredients:
-			if ingredient in cupboard:
-				final.append(meal)
+			if ingredient.name in cupboard.keys():
+				if cupboard[ingredient].quantity >= ingredient.quantity:
+					final.append(meal)
 
 def main():
 
@@ -76,6 +77,7 @@ def main():
 	items = getItems()
 	meals = getPossibleMeals(getMeals(), items)
 
+	# No meals can be made with what is in the cupboard
 	if meals == None:
 		print("No possible meals.")
 		return
@@ -84,6 +86,7 @@ def main():
 	time = 10
 	print(items)
 
+	# Remove amound of ingredients needed
 	for item in calculateMealPlan(budget, time, meals):
 		print(item)
 		for ingredient in item.ingredients:
