@@ -1,88 +1,69 @@
 import random, csv, os
 from food_planner.meal import Meal
 from food_planner.foodItem import FoodItem
+from food_planner.tools import getItems, getMeals
 
 
-BASE_DIR = os.getcwd()
-MEAL_LOC = os.path.join("data", "meals.csv")
-ITEM_LOC = os.path.join("data", "cupboard.csv")
-DATA_LOC = os.path.join("data", "data.txt")
-
-
-# Load meal data from meals.csv
-def getMeals():
-	meals = []
-	with open(os.path.join(BASE_DIR, MEAL_LOC), "r") as file:
-		csv_reader = csv.reader(file, delimiter=',')
-		for row in csv_reader:
-			items = []
-			for ingredient in row[1:]:
-				items.append(ingredient.split(":"))
-			ingredients = [FoodItem(item[0], item[1], item[2]) for item in items]
-			# TODO: fix bug where not all ingredients are loaded
-			meals.append(Meal(row[0], ingredients))
-	return meals
-
-
-# Load the cupboard items
-def getItems():
-	items = {}
-	with open(os.path.join(BASE_DIR, ITEM_LOC), "r") as file:
-		csv_reader = csv.reader(file, delimiter=',')
-		for row in csv_reader:
-			items[row[0]] = FoodItem(row[0], row[1], row[2])
-	return items
-
-
-# Load all user data
-def loadData():
-	with open(os.path.join(BASE_DIR, DATA_LOC), "r") as f:
-		return f.readlines()
-
-
-# Add a meal to all the meals
-def updateMeal(meals):
-	with open(os.path.join(BASE_DIR, MEAL_LOC), "w") as file:
-		for meal in meals:
-			items = ""
-			for i in meal.ingredients:
-				items += f"{i.name}:{i.quantity}:{i.price}" + ","
-			file.write(f"{meal.name},{items[:-1]}\n")
-		
-
-# Add an item that you can shop
-def updateCupboard(items):
-	with open(os.path.join(BASE_DIR, ITEM_LOC), "w") as f:
-		for item in items:
-			print(f"Adding {item.name}")
-			f.write(f"{item.name},{str(item.quantity)},{str(item.price)}\n")
+POOR, MEDIUM, RICH = 2, 3, 5
 
 
 def calculateMealPlan(budget, time, meals):
-	mealAmount = time*2
 
+	# check that meals can be calculated
+	if time < 1 or budget < 1 or meals == []:
+		return
+
+	# The final return list
 	meal_plan = []
-
-	
-	poorAttraction, mediumAttraction, richAttraction = 0,0,0
 
 	rich_meals = []
 	medium_meals = []
 	poor_meals = []
 
+	# meals that have already been selected and don't want to be selected
+	# several times in a row.
+	cached_meals = []
+
+	# classify meal prices
 	for meal in meals:
-		if meal.calcPrice() > 5:
+		print(meal.price)
+		if meal.price > 5:
 			rich_meals.append(meal)
-		elif meal.calcPrice()() >= 3:
+		elif meal.price >= 3:
 			medium_meals.append(meal)
 		else:
 			poor_meals.append(meal)
 
+	print(rich_meals)
+	print(medium_meals)
+	print(poor_meals)
+
 	# For every block of days select some random meals and appends
 
 	for i in range(time):
-		pass
-		
+		dailyBudget = budget / time
+
+		poorAttraction = (RICH - dailyBudget) * 10
+		richAttraction = dailyBudget * 10
+		mediumAttraction = MEDIUM*10 + (richAttraction - poorAttraction)
+
+		threshold = (100-int(poorAttraction)) + int(richAttraction)
+		r = random.randint(0, threshold)
+		if r > (50 + int(mediumAttraction/3)) and len(rich_meals) != 0:
+			meal_plan.append(rich_meals[random.randint(0,len(rich_meals)-1)])
+		elif r < (50-int(mediumAttraction/3)) and len(poor_meals) != 0:
+			meal_plan.append(poor_meals[random.randint(0,len(poor_meals)-1)])
+		else:
+			if len(medium_meals) != 0:
+				meal_plan.append(medium_meals[random.randint(0,len(medium_meals)-1)])
+			else:
+				meal_plan.append(meals[random.randint(0,len(meals)-1)])
+
+		budget -= meal_plan[-1].price
+
+		if budget <= 0:
+			return
+
 
 	return meal_plan
 
@@ -93,10 +74,11 @@ def main():
 	items = getItems()
 	meals = getMeals()
 
-	budget = float(input("Enter amount of money: "))
-	time = int(input("Enter number of days: "))
+	budget = 100
+	time = 10
 
-	print(calculateMealPlan(budget, time, meals))
+	for item in calculateMealPlan(budget, time, meals):
+		items[item.name] = 0
 
 
 if __name__ == "__main__":

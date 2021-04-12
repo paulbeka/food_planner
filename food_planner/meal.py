@@ -3,6 +3,7 @@ class Meal:
 	def __init__(self, name, ingredients):
 		self.name = name
 		self.ingredients = ingredients
+		self.price = self.calcPrice()
 
 	def __str__(self):
 		return self.name + ", ingredients: " + str(self.ingredients)
