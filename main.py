@@ -70,9 +70,11 @@ def calculateMealPlan(budget, time, meals, cupboard):
 			if len(medium_meals) != 0:
 				meal_plan.append(medium_meals[random.randint(0,len(medium_meals)-1)])
 			else:
+				if len(meals) == 0:
+					print("Cannot calculate a meal path.")
+					return
 				meal_plan.append(meals[random.randint(0,len(meals)-1)])
 
-		
 		# Update the budget and the ingredient quantities
 		budget -= meal_plan[-1].price
 		for ingredient in meal_plan[-1].ingredients:
@@ -109,6 +111,8 @@ def main():
 	time = 10
 
 	meal_plan = calculateMealPlan(budget, time, meals, items)
+	if meal_plan == None:
+		print("No meal plan can be calculated.")
 	
 	# Remove amound of ingredients needed
 	for item in meal_plan:

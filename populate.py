@@ -23,11 +23,11 @@ def main():
 	for item in foodList:
 		foodDict[item.name] = item
 
-	mealList.append(Meal("chicken_onions", [foodList[0], foodList[3]]))
+	mealList.append(Meal("chicken_onions", [FoodItem("chicken", 500, 2/200), foodList[3]]))
 	mealList.append(Meal("pork_asparagus", [foodList[2], foodList[4]]))
-	mealList.append(Meal("pizza_chicken", [foodList[0], foodList[6]]))
-	mealList.append(Meal("nutella_steak", [foodList[5], foodList[1]]))
-	mealList.append(Meal("chicken_steak", [foodList[0], foodList[1]]))
+	mealList.append(Meal("pizza_chicken", [FoodItem("chicken", 500, 2/200), foodList[6]]))
+	mealList.append(Meal("nutella_steak", [FoodItem("nutella", 50, 4.5/1000), FoodItem("steak", 50, 5/250)]))
+	mealList.append(Meal("chicken_steak", [FoodItem("chicken", 500, 2/200), FoodItem("steak", 50, 5/250)]))
 	mealList.append(Meal("tortilla_tortilla", [FoodItem("tortilla",2,2/8)]))
 
 
