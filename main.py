@@ -1,4 +1,4 @@
-import random, csv, os
+import random, csv, os, itertools
 from food_planner.meal import Meal
 from food_planner.foodItem import FoodItem
 from food_planner.tools import getItems, getMeals, updateCupboard
@@ -7,7 +7,16 @@ from food_planner.tools import getItems, getMeals, updateCupboard
 POOR, MEDIUM, RICH = 2, 3, 5
 
 
-def calculateMealPlan(budget, time, meals):
+def checkCanCook(meal, cupboard):
+	for ingredient in meal.ingredients:
+		if ingredient != None and ingredient.name in cupboard.keys():
+			#print(cupboard[ingredient.name].quantity, ingredient.quantity)
+			if cupboard[ingredient.name].quantity < ingredient.quantity:
+				return False
+	return True
+
+
+def calculateMealPlan(budget, time, meals, cupboard):
 
 	# check that meals can be calculated
 	if time < 1 or budget < 1 or meals == []:
@@ -38,14 +47,23 @@ def calculateMealPlan(budget, time, meals):
 	for i in range(time):
 		dailyBudget = budget / time
 
+		# Check what meals you can cook
+		poor_meals = getPossibleMeals(poor_meals, cupboard)
+		medium_meals = getPossibleMeals(medium_meals, cupboard)
+		rich_meals = getPossibleMeals(rich_meals, cupboard)
+		meals = getPossibleMeals(meals, cupboard)
+
+		# Get attraction values
 		poorAttraction = (RICH - dailyBudget) * 10
 		richAttraction = dailyBudget * 10
 		mediumAttraction = MEDIUM*10 + (richAttraction - poorAttraction)
 
 		threshold = (100-int(poorAttraction)) + int(richAttraction)
 		r = random.randint(0, threshold)
+		# In the rich range
 		if r > (50 + int(mediumAttraction/3)) and len(rich_meals) != 0:
 			meal_plan.append(rich_meals[random.randint(0,len(rich_meals)-1)])
+		# In the poor range
 		elif r < (50-int(mediumAttraction/3)) and len(poor_meals) != 0:
 			meal_plan.append(poor_meals[random.randint(0,len(poor_meals)-1)])
 		else:
@@ -54,21 +72,26 @@ def calculateMealPlan(budget, time, meals):
 			else:
 				meal_plan.append(meals[random.randint(0,len(meals)-1)])
 
+		
+		# Update the budget and the ingredient quantities
 		budget -= meal_plan[-1].price
+		for ingredient in meal_plan[-1].ingredients:
+			cupboard[ingredient.name].quantity -= ingredient.quantity
 
 		if budget <= 0:
 			return
 
-
 	return meal_plan
+
 
 def getPossibleMeals(meals, cupboard):
 	final = []
 	for meal in meals:
-		for ingredient in meal.ingredients:
-			if ingredient.name in cupboard.keys():
-				if cupboard[ingredient].quantity >= ingredient.quantity:
-					final.append(meal)
+		if checkCanCook(meal, cupboard):
+			final.append(meal)
+
+	return final
+
 
 def main():
 
@@ -78,19 +101,18 @@ def main():
 	meals = getPossibleMeals(getMeals(), items)
 
 	# No meals can be made with what is in the cupboard
-	if meals == None:
+	if meals == None or meals == []:
 		print("No possible meals.")
 		return
 
 	budget = 100
 	time = 10
-	print(items)
 
+	meal_plan = calculateMealPlan(budget, time, meals, items)
+	
 	# Remove amound of ingredients needed
-	for item in calculateMealPlan(budget, time, meals):
+	for item in meal_plan:
 		print(item)
-		for ingredient in item.ingredients:
-			items[ingredient.name].quantity -= ingredient.quantity
 
 	updateCupboard(items)
 

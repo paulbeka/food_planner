@@ -3,8 +3,6 @@ from food_planner.meal import Meal
 from food_planner.foodItem import FoodItem
 from food_planner.settings import BASE_DIR, ITEM_LOC, MEAL_LOC
 
-itemNames = []
-
 # Load meal data from meals.csv
 def getMeals():
 	meals = []
@@ -27,7 +25,6 @@ def getItems():
 		csv_reader = csv.reader(file, delimiter=',')
 		for row in csv_reader:
 			items[row[0]] = FoodItem(row[0], row[1], row[2])
-			itemNames.append(row[0])
 	return items
 
 
@@ -49,7 +46,7 @@ def updateMeal(meals):
 
 # Add an item that you can shop
 def updateCupboard(items):
+	# Fix the population list script
 	with open(os.path.join(BASE_DIR, ITEM_LOC), "w") as f:
-		for name in itemNames:
-			print(f"Adding {items[name]}")
+		for name in items.keys():
 			f.write(f"{name},{str(items[name].quantity)},{str(items[name].price)}\n")
