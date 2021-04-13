@@ -1,7 +1,7 @@
 import csv, os
 from food_planner.meal import Meal
 from food_planner.foodItem import FoodItem
-from food_planner.settings import BASE_DIR, ITEM_LOC, MEAL_LOC
+from food_planner.settings import BASE_DIR, ITEM_LOC, MEAL_LOC, PRICE_LOC
 
 # Load meal data from meals.csv
 def getMeals():
@@ -19,14 +19,21 @@ def getMeals():
 
 
 # Load the cupboard items
-def getItems():
+def getStuff(loc):
 	items = {}
-	with open(os.path.join(BASE_DIR, ITEM_LOC), "r") as file:
+	with open(os.path.join(BASE_DIR, loc), "r") as file:
 		csv_reader = csv.reader(file, delimiter=',')
 		for row in csv_reader:
 			items[row[0]] = FoodItem(row[0], row[1], row[2])
 	return items
 
+
+def getItems():
+	return getStuff(ITEM_LOC)
+
+
+def getPrices():
+	return getStuff(PRICE_LOC)
 
 # Load all user data
 def loadData():

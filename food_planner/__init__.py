@@ -1,13 +1,14 @@
 import os, pickle
+from food_planner.settings import ITEM_LOC, PRICE_LOC, MEAL_LOC
 
-meals = os.path.join(os.getcwd(), "data", "meals.csv")
-items = os.path.join(os.getcwd(), "data", "cupboard.csv")
-prices = os.path.join(os.getcwd(), "data", "prices.csv")
-
-if not os.path.exists(meals):
-	with open(meals, "w") as f:
+if not os.path.exists(MEAL_LOC):
+	with open(MEAL_LOC, "w") as f:
 		pass
 
-if not os.path.exists(items):
-	with open(items, "w") as f:
+if not os.path.exists(ITEM_LOC):
+	with open(ITEM_LOC, "w") as f:
+		pass
+
+if not os.path.exists(PRICE_LOC):
+	with open(PRICE_LOC, "w") as f:
 		pass

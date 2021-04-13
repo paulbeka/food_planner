@@ -20,6 +20,7 @@ def calculateMealPlan(budget, time, meals, cupboard):
 
 	# check that meals can be calculated
 	if time < 1 or budget < 1 or meals == []:
+		print("The meal list, budget, or time was too low.")
 		return
 
 	# The final return list

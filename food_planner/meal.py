@@ -8,6 +8,7 @@ class Meal:
 	def __str__(self):
 		return self.name + ", ingredients: " + str(self.ingredients)
 
+	# Calculate your own price
 	def calcPrice(self):
 		price = 0
 
