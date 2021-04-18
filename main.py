@@ -2,6 +2,7 @@ import random, csv, os, sys
 from food_planner.meal import Meal
 from food_planner.foodItem import FoodItem
 from food_planner.tools import getItems, getMeals, updateCupboard
+from food_planner.dataAdder import DataAdder
 
 
 POOR, MEDIUM, RICH = 2, 3, 5
@@ -95,10 +96,7 @@ def getPossibleMeals(meals, cupboard):
 	return final
 
 
-def main():
-
-	# balance = getData()
-
+def runCalculator():
 	items = getItems()
 	meals = getPossibleMeals(getMeals(), items)
 
@@ -118,7 +116,14 @@ def main():
 	for item in meal_plan:
 		print(item)
 
-	updateCupboard(items)
+	updateCupboard(items)	
+
+
+def main():
+
+	DataAdder().run()
+	runCalculator()
+	
 
 if __name__ == "__main__":
 	main()

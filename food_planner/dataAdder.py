@@ -1,9 +1,9 @@
 import os, csv
 from food_planner.foodItem import FoodItem
 from food_planner.meal import Meal
-from food_planner.tools import getPrices, getMeals, updateMeal, updatePrices
+from food_planner.tools import getPrices, getMeals, updateMeals, updatePrices
 
-class dataAdder:
+class DataAdder:
 
 	def __init__(self):
 		self.priceList = getPrices()
@@ -13,31 +13,30 @@ class dataAdder:
 	def addPrices(self):
 		
 		# Loop until input is "###"
-		quit = False
-		while not quit:
+		while True:
 			item_name = input("Name: ")
 
 			if item_name == "###":
 				print("Exiting.")
-				quit = True
+				break
 
 			item_price = float(input("Price: "))
 			item_quantity = float(input("Quantity: "))
 
-			self.priceList.append(FoodItem(item_name, item_price, item_quantity))
+			self.priceList[item_name] = FoodItem(item_name, item_price, item_price/item_quantity)
 
+		updatePrices(self.priceList)
 
 	def addMeals(self):
 
 		meals_to_add = []
-		quit = False
 
-		while not quit:
+		while True:
 			meal_name = input("Name: ")
 
 			if meal_name == "###":
 				print("Exiting.")
-				quit = True
+				break
 
 			ingredients = []
 
