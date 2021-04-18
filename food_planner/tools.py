@@ -41,8 +41,8 @@ def loadData():
 		return f.readlines()
 
 
-# Add a meal to all the meals
-def updateMeal(meals):
+# Update the meals that you can cook
+def updateMeals(meals):
 	with open(os.path.join(BASE_DIR, MEAL_LOC), "w") as file:
 		for meal in meals:
 			items = ""
@@ -51,9 +51,19 @@ def updateMeal(meals):
 			file.write(f"{meal.name},{items[:-1]}\n")
 		
 
-# Add an item that you can shop
-def updateCupboard(items):
+# Update the items in either cupboard or the priceList
+def updateItemStuff(items, loc):
 	# Fix the population list script
-	with open(os.path.join(BASE_DIR, ITEM_LOC), "w") as f:
+	with open(os.path.join(BASE_DIR, loc), "w") as f:
 		for name in items.keys():
 			f.write(f"{name},{str(items[name].quantity)},{str(items[name].price)}\n")
+
+
+# Update the prices for items
+def updatePrices(items):
+	updateItemStuff(items, PRICE_LOC)
+
+
+# Update the cupboard items
+def updateCupboard(items):
+	updateItemStuff(items, ITEM_LOC)

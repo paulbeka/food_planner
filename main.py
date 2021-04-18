@@ -1,4 +1,4 @@
-import random, csv, os, itertools
+import random, csv, os, sys
 from food_planner.meal import Meal
 from food_planner.foodItem import FoodItem
 from food_planner.tools import getItems, getMeals, updateCupboard
