@@ -63,19 +63,18 @@ def calculateMealPlan(budget, time, meals, cupboard):
 		r = random.randint(0, threshold)
 		# In the rich range
 		if r > (50 + int(mediumAttraction/3)) and len(rich_meals) != 0:
-			meal_plan.append(rich_meals[random.randint(0,len(rich_meals)-1)])
+			meal_plan.append(random.choice(rich_meals))
 		# In the poor range
 		elif r < (50-int(mediumAttraction/3)) and len(poor_meals) != 0:
-			meal_plan.append(poor_meals[random.randint(0,len(poor_meals)-1)])
+			meal_plan.append(random.choice(poor_meals))
 		else:
 			if len(medium_meals) != 0:
-				meal_plan.append(medium_meals[random.randint(0,len(medium_meals)-1)])
+				meal_plan.append(random.choice(medium_meals))
 			else:
 				if len(meals) == 0:
 					print("Cannot calculate a meal path.")
 					return
-				meal_plan.append(meals[random.randint(0,len(meals)-1)])
-
+				meal_plan.append(random.choice(meals))
 		# Update the budget and the ingredient quantities
 		budget -= meal_plan[-1].price
 		for ingredient in meal_plan[-1].ingredients:
