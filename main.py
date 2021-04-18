@@ -122,7 +122,7 @@ def runCalculator():
 def main():
 
 	DataAdder().run()
-	runCalculator()
+	# runCalculator()
 	
 
 if __name__ == "__main__":

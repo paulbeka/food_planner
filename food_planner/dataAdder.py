@@ -1,12 +1,14 @@
 import os, csv
 from food_planner.foodItem import FoodItem
 from food_planner.meal import Meal
-from food_planner.tools import getPrices, getMeals, updateMeals, updatePrices
+import food_planner.tools
+
+# TODO: check that price or meal does not already exist.
 
 class DataAdder:
 
 	def __init__(self):
-		self.priceList = getPrices()
+		self.priceList = tools.getPrices()
 		self.exit = False
 
 
@@ -25,7 +27,30 @@ class DataAdder:
 
 			self.priceList[item_name] = FoodItem(item_name, item_price, item_price/item_quantity)
 
-		updatePrices(self.priceList)
+		tools.updatePrices(self.priceList)
+
+	def addCupboard(self):
+
+		cupboard = tools.getCupboard()
+
+		while True:
+			item_name = input("Name: ")
+
+			if item_name == "###":
+				print("Exiting.")
+				break
+
+			if item_name in cupboard.keys():
+				cupboard[item_name].quantity += self.priceList[item_name].quantity
+			elif item_name in self.priceList.keys():
+				cupboard[item_name] = self.priceList[item_name]
+			else:
+				print("Item does not exist. Please try again.")
+				continue
+
+			print("Successfully added to cupboard.")
+
+		tools.updateCupboard(self.priceList)
 
 	def addMeals(self):
 
@@ -63,8 +88,8 @@ class DataAdder:
 				ingredients.append(FoodItem(ingredient_name, ingredient_quantity, ingredient_price))
 				print("Ingredient has been added.")
 
-		meals = getMeals() + meals_to_add
-		updateMeals(meals)
+		meals = tools.getMeals() + meals_to_add
+		tools.updateMeals(meals)
 
 
 	def run(self):
