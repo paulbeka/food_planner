@@ -29,7 +29,7 @@ class DataAdder:
 			item_price = float(input("Price: "))
 			item_quantity = float(input("Quantity: "))
 
-			self.priceList[item_name] = FoodItem(item_name, item_price, item_price/item_quantity)
+			self.priceList[item_name] = FoodItem(item_name, item_quantity, item_price/item_quantity)
 
 		tools.updatePrices(self.priceList)
 
@@ -72,20 +72,20 @@ class DataAdder:
 			while True:
 				ingredient_name = input("Ingredient name: ")
 
-				ingredient_price = 0
-				for price in self.priceList:
-					if price.name == ingredient_name:
-						ingredient_price = price.price
+				if ingredient_name == "###":
+					if ingredients:
+						meals_to_add.append(Meal(meal_name, ingredients))
+						print("Meal has been added.")
 						break
+					else:
+						print("No ingredients. Please put ingredients")
+						continue
 
-				if ingredient_price == 0:
-					print("Item not found. Please try again.")
+				try:
+					ingredient_price = self.priceList[ingredient_name].price
+				except KeyError:
+					print("No such item exists. Please try again.")
 					continue
-
-				if ingredient_name == "###" and not ingredients:
-					meals_to_add.append(Meal(meal_name, ingredients))
-					print("Meal has been added.")
-					break
 
 				ingredient_quantity = float(input("Ingredient quantity: "))
 
