@@ -12,9 +12,10 @@ def getMeals():
 			items = []
 			for ingredient in row[1:]:
 				items.append(ingredient.split(":"))
-			ingredients = [FoodItem(item[0], item[1], item[2]) for item in items]
-			# TODO: fix bug where not all ingredients are loaded
-			meals.append(Meal(row[0], ingredients))
+			if items:
+				ingredients = [FoodItem(item[0], item[1], item[2]) for item in items]
+				meals.append(Meal(row[0], ingredients))
+	
 	return meals
 
 

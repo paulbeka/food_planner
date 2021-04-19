@@ -1,1 +1,8 @@
-eggs,eggs:1.0:0.170833333,ham:2.0:0.1
+tortillas,tortilla_wraps:2.0:0.11875,ham:5.0:0.1,edam:2.0:0.175,2avocado:0.5:1.25
+pork_hash_petitpois,4_pork_loins:2.0:0.75,petit_pois:200.0:0.0013,hash_browns:5.0:0.08
+spaghetti bolognese,spagetti:200.0:0.001,bolognese:250.0:0.00064,minced_beef:500.0:0.005
+beef and corn,corn_can:200.0:0.0034999999999999996,minced_beef:250.0:0.005,couscous:150.0:0.0014
+eggs and potatoes,eggs:3.0:0.170833333,baby_potatoes:330.0:0.001
+eggs_poatoes_carrots,baby_potatoes:330.0:0.001,eggs:3.0:0.170833333,carrots:200.0:0.0004
+carbonara,spagetti:200.0:0.001,smoked_bacon_lardons:1.0:1.0,red_onions:0.5:0.2833333333333333,eggs:1.0:0.170833333
+sasage_veggies_potatoes,sausages:6.0:0.20833333333333334,baby_potatoes:330.0:0.001,mixed_frozen_veggies:250.0:0.00079

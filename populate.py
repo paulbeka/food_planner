@@ -11,7 +11,7 @@ def main():
 
 	foodDict = {}
 
-	foodList.append(FoodItem("chicken",200,2/200))
+	foodList.append(FoodItem("chicken",300,2/300))
 	foodList.append(FoodItem("steak",250,5/250))
 	foodList.append(FoodItem("pork",300,2/300))
 	foodList.append(FoodItem("onions",100,1.6/100))

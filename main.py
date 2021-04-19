@@ -11,7 +11,6 @@ POOR, MEDIUM, RICH = 2, 3, 5
 def checkCanCook(meal, cupboard):
 	for ingredient in meal.ingredients:
 		if ingredient != None and ingredient.name in cupboard.keys():
-			#print(cupboard[ingredient.name].quantity, ingredient.quantity)
 			if cupboard[ingredient.name].quantity < ingredient.quantity:
 				return False
 	return True
@@ -105,24 +104,24 @@ def runCalculator():
 		print("No possible meals.")
 		return
 
-	budget = 100
-	time = 10
+	budget = 50
+	time = 7
 
 	meal_plan = calculateMealPlan(budget, time, meals, items)
 	if meal_plan == None:
 		print("No meal plan can be calculated.")
+		return
 	
-	# Remove amound of ingredients needed
 	for item in meal_plan:
-		print(item)
+		print(item.name)
 
 	updateCupboard(items)	
 
 
 def main():
 
-	DataAdder().run()
-	# runCalculator()
+	# DataAdder().run()
+	runCalculator()
 	
 
 if __name__ == "__main__":
