@@ -1,7 +1,7 @@
 import os, csv
 from food_planner.foodItem import FoodItem
 from food_planner.meal import Meal
-import food_planner.tools
+import food_planner.tools as tools	
 
 # TODO: check that price or meal does not already exist.
 
@@ -21,6 +21,10 @@ class DataAdder:
 			if item_name == "###":
 				print("Exiting.")
 				break
+
+			if item_name in self.priceList.keys():
+				print("Item already exists. Enter new item.")
+				continue
 
 			item_price = float(input("Price: "))
 			item_quantity = float(input("Quantity: "))
