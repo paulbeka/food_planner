@@ -16,3 +16,10 @@ class Meal:
 			price += ingredient.price * ingredient.quantity
 
 		return price
+
+	def checkCanCook(self, cupboard):
+		for ingredient in self.ingredients:
+			if ingredient != None and ingredient.name in cupboard.keys():
+				if cupboard[ingredient.name].quantity < ingredient.quantity:
+					return False
+		return True
