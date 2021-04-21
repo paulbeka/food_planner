@@ -120,8 +120,12 @@ def runCalculator():
 
 def main():
 
-	# DataAdder().run()
-	runCalculator()
+	if len(sys.argv) > 1:
+		if "-a" in sys.argv:
+			DataAdder().run()
+
+		if "-c" in sys.argv:
+			runCalculator()
 	
 
 if __name__ == "__main__":
