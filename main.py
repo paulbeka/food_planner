@@ -6,14 +6,14 @@ from food_planner.dataAdder import DataAdder
 from food_planner.calculator import Calculator
 
 
-def runCalculator():
+def runCalculator(mode):
 
 	budget = 50
 	time = 7
 
 	calculator = Calculator(budget, time)
 
-	meal_plan = calculator.run(True)
+	meal_plan = calculator.run(mode)
 	if meal_plan == None:
 		print("No meal plan can be calculated.")
 		return
@@ -29,10 +29,10 @@ def main():
 			DataAdder().run()
 
 		if "-c" in sys.argv:
-			runCalculator()
+			runCalculator(False)
 
 		if "-m" in sys.argv:
-			runCalculator()
+			runCalculator(True)
 	
 
 if __name__ == "__main__":

@@ -1,5 +1,5 @@
-import random
-from food_planner.tools import getMeals, getItems, updateCupboard
+import random, math
+from food_planner.tools import getMeals, getItems, updateCupboard, getPrices
 
 POOR, MEDIUM, RICH = 2, 3, 5
 
@@ -19,7 +19,12 @@ class Calculator:
 	# Run the program depending on the mode
 	def run(self, mode):
 		if mode:
-			return self.calculate(True)
+			shopping_plan = self.calculate(True)
+			shopping_list = self.generateShoppingList(shopping_plan)
+			print("Items needed: ")
+			for item in shopping_list:
+				print(f"{item[0]} : {item[1]}")
+			return shopping_plan
 		else:
 			meal_plan = self.calculate(False)
 			updateCupboard(self.cupboard)
@@ -96,8 +101,28 @@ class Calculator:
 		return meal_plan
 
 
-	def generateShoppingList(self):
-		pass
+	def generateShoppingList(self, meal_plan):
+
+		shoppingList = []
+		shoppingDict = {}
+		prices = getPrices()
+
+		canDo = self.getPossibleMeals(meal_plan)
+
+		meal_plan = [x for x in meal_plan if x not in canDo]
+
+		for meal in meal_plan:
+			neededList = meal.findIngredientsNeeded(self.cupboard)
+			for item in neededList:
+				if item[0] in shoppingDict:
+					shoppingDict[item[0]] = shoppingDict[item[0]] + item[1]
+				else:
+					shoppingDict[item[0]] = item[1]
+
+		for item in shoppingDict.keys():
+			shoppingList.append([item, math.ceil(shoppingDict[item] / prices[item].quantity)])
+
+		return shoppingList
 
 
 	# Get a list of possible meals with items in the cupboard
