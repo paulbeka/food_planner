@@ -21,9 +21,13 @@ class Meal:
 	# return whether or not you can cook this meal given the amount of food in the cupboard
 	def checkCanCook(self, cupboard):
 		for ingredient in self.ingredients:
-			if ingredient != None and ingredient.name in cupboard.keys():
+			if ingredient == None:
+				continue
+			if ingredient.name in cupboard.keys():
 				if cupboard[ingredient.name].quantity < ingredient.quantity:
 					return False
+			else:
+				return False
 		return True
 
 
@@ -33,10 +37,9 @@ class Meal:
 		for ingredient in self.ingredients:
 			if ingredient == None:
 				continue
-			if ingredient.name in cupboard.keys():
+			if ingredient.name in cupboard:
 				if cupboard[ingredient.name].quantity < ingredient.quantity:
 					needed.append([ingredient.name, ingredient.quantity - cupboard[ingredient.name].quantity])
 			else:
 				needed.append([ingredient.name, ingredient.quantity])
-
 		return needed

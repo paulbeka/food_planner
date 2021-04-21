@@ -108,7 +108,7 @@ class Calculator:
 		prices = getPrices()
 
 		canDo = self.getPossibleMeals(meal_plan)
-
+		
 		meal_plan = [x for x in meal_plan if x not in canDo]
 
 		for meal in meal_plan:
