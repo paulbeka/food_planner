@@ -6,10 +6,7 @@ from food_planner.dataAdder import DataAdder
 from food_planner.calculator import Calculator
 
 
-def runCalculator(mode):
-
-	budget = 50
-	time = 7
+def runCalculator(mode, budget, time):
 
 	calculator = Calculator(budget, time)
 
@@ -28,11 +25,15 @@ def main():
 		if "-a" in sys.argv:
 			DataAdder().run()
 
-		if "-c" in sys.argv:
-			runCalculator(False)
+		elif sys.argv[1] == "-c" and len(sys.argv) == 4:
+			runCalculator(False, int(sys.argv[2]), int(sys.argv[3]))
 
-		if "-m" in sys.argv:
-			runCalculator(True)
+		elif sys.argv[1] == "-m" and len(sys.argv) == 4:
+			runCalculator(True, int(sys.argv[2]), int(sys.argv[3]))
+
+		else:
+			print("Error: format needs to be in the form:")
+			print("python3 main.py <command> <budget> <time>")
 	
 
 if __name__ == "__main__":
