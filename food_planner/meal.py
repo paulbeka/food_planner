@@ -40,6 +40,7 @@ class Meal:
 			if ingredient.name in cupboard:
 				if cupboard[ingredient.name].quantity < ingredient.quantity:
 					needed.append([ingredient.name, ingredient.quantity - cupboard[ingredient.name].quantity])
+			# Ingredient not in cupboard
 			else:
 				needed.append([ingredient.name, ingredient.quantity])
 		return needed

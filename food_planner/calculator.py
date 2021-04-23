@@ -8,6 +8,7 @@ class Calculator:
 	def __init__(self, budget, time):
 		self.meals = getMeals()
 		self.cupboard = getItems()
+		# Check values are in bounds
 		if time < 1:
 			raise Exception("Time must be above 0.")
 		if budget < 1:
@@ -84,8 +85,7 @@ class Calculator:
 					meal_plan.append(random.choice(medium_meals))
 				else:
 					if len(self.meals) == 0:
-						print("Cannot calculate a meal path.")
-						return
+						raise Exception("No possible meals to chose from due to lack or items.")
 					meal_plan.append(random.choice(self.meals))
 
 			# Update the budget and the ingredient quantities
@@ -96,7 +96,7 @@ class Calculator:
 
 
 			if self.budget <= 0:
-				return
+				raise Exception("Budget is not large enough. Could not calculate meal plan.")
 
 		return meal_plan
 
@@ -108,9 +108,11 @@ class Calculator:
 		prices = getPrices()
 
 		canDo = self.getPossibleMeals(meal_plan)
-		
+
+		# Remove all meals you can already make
 		meal_plan = [x for x in meal_plan if x not in canDo]
 
+		# Check how much of each ingredient you need
 		for meal in meal_plan:
 			neededList = meal.findIngredientsNeeded(self.cupboard)
 			for item in neededList:
